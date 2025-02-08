@@ -1,5 +1,7 @@
 package com.jojoldu.book.freelec_springboot_webservice.controller;
 
+import com.jojoldu.book.freelec_springboot_webservice.config.auth.LoginUser;
+import com.jojoldu.book.freelec_springboot_webservice.config.auth.dto.SessionUser;
 import com.jojoldu.book.freelec_springboot_webservice.dto.PostsResponseDto;
 import com.jojoldu.book.freelec_springboot_webservice.service.posts.PostService;
 import lombok.RequiredArgsConstructor;
@@ -15,8 +17,12 @@ public class IndexController {
     private final PostService postService;
 
     @GetMapping
-    public String index(Model model) {
+    public String index(Model model, @LoginUser SessionUser user) {
         model.addAttribute("posts", postService.findAllDesc());
+
+        if (user != null) {
+            model.addAttribute("userName", user.getName());
+        }
         return "index";
     }
 
